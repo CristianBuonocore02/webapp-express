@@ -12,7 +12,7 @@ const index = (req, res) => {
             });
         }
 
-        console.log('Dati ricevuti dal DB:', result); // in console
+        // console.log('Dati ricevuti dal DB:', result); // in console
         res.json(result); //inviata a Postman
     });
 };
@@ -37,8 +37,30 @@ const show = (req, res) => {
                 message: `Nessun film trovato con ID ${id}`
             });
         }
+
         const movie = result[0]
-        res.json(result[0]);
+
+
+        const sql_reviews = 'SELECT * FROM reviews WHERE movie_id = ?';
+        connection.query(sql_reviews, [id], (err, resultReviews) => {
+            console.log(resultReviews);
+
+            if (err) {
+                return res.status(500).json({
+                    error: true,
+                    message: err.message
+                });
+            }
+
+            if (result.length === 0) {
+                return res.status(404).json({
+                    error: true,
+                    message: `Nessun film trovato con ID ${id}`
+                });
+            }
+            movie.reviews = resultReviews
+            res.json(movie);
+        })
     });
 };
 
