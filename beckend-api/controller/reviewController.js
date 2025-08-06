@@ -13,14 +13,16 @@ exports.getReviewsByMovieId = (req, res) => {
 
 exports.addReview = (req, res) => {
     const movie_id = req.params.id;
-    const { user, text } = req.body;
+    console.log(req.body);
+    const { name, text, vote } = req.body;
 
-    if (!user || !text) return res.status(400).json({ error: "user e text obbligatori" });
 
-    const sql = "INSERT INTO reviews (movie_id, user, text) VALUES (?, ?, ?)";
-    connection.query(sql, [movie_id, user, text], (err, result) => {
+    if (!name || !text) return res.status(400).json({ error: "user e text obbligatori" });
+
+    const sql = "INSERT INTO reviews (movie_id, name, text, vote) VALUES (?, ?, ?, ?)";
+    connection.query(sql, [movie_id, name, text, vote], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
 
-        res.status(201).json({ id: result.insertId, movie_id, user, text });
+        res.status(201).json({ id: result.insertId, movie_id, name, text, vote });
     });
 };

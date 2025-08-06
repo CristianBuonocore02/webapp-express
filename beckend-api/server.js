@@ -5,6 +5,7 @@ const movieRouter = require('./routers/movies')
 const cors = require("cors");
 
 app.use(express.static('public'))
+app.use(express.json())
 
 // consenti l'accesso solo al sito che ha questo indirizzo
 app.use(cors({
